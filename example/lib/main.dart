@@ -26,6 +26,20 @@ class _MyAppState extends State<MyApp> {
     debugPrint('PiP enabled? $status');
   }
 
+  Future<void> disablePip() async {
+    final status = await floating.disable();
+    debugPrint('PiP disabled? $status');
+  }
+
+  @override
+  void initState() {
+    Future.delayed(
+      Duration(seconds: 10),
+      () => disablePip(),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(

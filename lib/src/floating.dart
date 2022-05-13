@@ -73,6 +73,14 @@ class Floating {
         : PiPStatus.unavailable;
   }
 
+  Future<PiPStatus> disable() async {
+    final bool? disabledSuccessfully =
+        await _channel.invokeMethod('disablePip');
+    return disabledSuccessfully ?? false
+        ? PiPStatus.disabled
+        : PiPStatus.enabled;
+  }
+
   // Disposes internal components used to update the [isInPipMode$] stream.
   void dispose() {
     _timer?.cancel();

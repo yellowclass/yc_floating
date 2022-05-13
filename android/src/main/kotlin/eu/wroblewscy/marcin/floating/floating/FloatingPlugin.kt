@@ -2,6 +2,7 @@ package eu.wroblewscy.marcin.floating.floating
 
 import android.app.Activity
 import android.app.PictureInPictureParams
+import android.app.RemoteAction
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -44,6 +45,8 @@ class FloatingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       } else {
         result.success(activity.enterPictureInPictureMode())
       }
+    } else if (call.method == "disablePip") {
+      result.success(activity.moveTaskToBack(false))
     } else if (call.method == "pipAvailable") {
       result.success(
           activity.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
