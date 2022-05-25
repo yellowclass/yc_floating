@@ -46,7 +46,7 @@ class FloatingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         result.success(activity.enterPictureInPictureMode())
       }
     } else if (call.method == "disablePip") {
-      result.success(activity.moveTaskToBack(false))
+      result.success(activity.moveTaskToBack(true))
     } else if (call.method == "pipAvailable") {
       result.success(
           activity.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
