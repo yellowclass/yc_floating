@@ -23,6 +23,9 @@ class Floating {
   /// by admin or device manufacturer. Also, the device may
   /// have Android version that was released without this feature.
   Future<bool> get isPipAvailable async {
+    if (!Platform.isAndroid) {
+      return false;
+    }
     final bool? supportsPip = await _channel.invokeMethod('pipAvailable');
     return supportsPip ?? false;
   }
@@ -37,6 +40,9 @@ class Floating {
   /// by admin or device manufacturer. Also, the device may
   /// have Android version that was released without this feature.
   Future<PiPStatus> get pipStatus async {
+    if (!Platform.isAndroid) {
+      return PiPStatus.unavailable;
+    }
     if (!await isPipAvailable) {
       return PiPStatus.unavailable;
     }
@@ -51,10 +57,12 @@ class Floating {
   //
   // This stream will call listeners only when the value changed.
   Stream<PiPStatus> get pipStatus$ {
-    _timer ??= Timer.periodic(
-      _probeInterval,
-      (_) async => _controller.add(await pipStatus),
-    );
+    if (Platform.isAndroid) {
+      _timer ??= Timer.periodic(
+        _probeInterval,
+        (_) async => _controller.add(await pipStatus),
+      );
+    }
     _stream ??= _controller.stream.asBroadcastStream();
     return _stream!.distinct();
   }
@@ -67,6 +75,10 @@ class Floating {
   /// by admin or device manufacturer. Also, the device may
   /// have Android version that was released without this feature.
   Future<PiPStatus> enable() async {
+    if (!Platform.isAndroid) {
+      return PiPStatus.unavailable;
+    }
+
     final bool? enabledSuccessfully = await _channel.invokeMethod('enablePip');
     return enabledSuccessfully ?? false
         ? PiPStatus.enabled
@@ -74,6 +86,9 @@ class Floating {
   }
 
   Future<PiPStatus> disable() async {
+    if (!Platform.isAndroid) {
+      return PiPStatus.disabled;
+    }
     final bool? disabledSuccessfully =
         await _channel.invokeMethod('disablePip');
     return disabledSuccessfully ?? false
