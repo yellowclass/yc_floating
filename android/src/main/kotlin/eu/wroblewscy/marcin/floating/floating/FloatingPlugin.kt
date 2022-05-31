@@ -29,7 +29,7 @@ class FloatingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   private lateinit var channel: MethodChannel
   private lateinit var context: Context
   private lateinit var activity: Activity
-  private lateinit var timer: Timer
+  private  var timer: Timer? = null
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "floating")
@@ -85,6 +85,6 @@ class FloatingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   fun cleanup() {
-    timer.cancel()
+    timer?.cancel()
   }
 }
