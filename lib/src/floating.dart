@@ -62,6 +62,8 @@ class Floating {
         _probeInterval,
         (_) async => _controller.add(await pipStatus),
       );
+    } else {
+      _controller.add(PiPStatus.unavailable);
     }
     _stream ??= _controller.stream.asBroadcastStream();
     return _stream!.distinct();
