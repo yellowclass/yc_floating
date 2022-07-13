@@ -29,7 +29,7 @@ class PiPSwitcher extends StatefulWidget {
 }
 
 class _PipAwareState extends State<PiPSwitcher> {
-  late final Floating? _floating = widget.floating;
+  late final Floating _floating = widget.floating ?? Floating();
 
   @override
   void dispose() {
@@ -39,21 +39,18 @@ class _PipAwareState extends State<PiPSwitcher> {
     /// Floating instance can be also provided by the user of this
     /// widget. If so, it's the user's responsibility to dispose
     /// it when necessary.
-    _floating?.dispose();
-    // if (widget.floating == null) {
-    //   _floating?.dispose();
-    // }
+    if (widget.floating == null) {
+      _floating.dispose();
+    }
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => _floating != null
-      ? StreamBuilder(
-          stream: _floating!.pipStatus$,
+  Widget build(BuildContext context) => StreamBuilder(
+          stream: _floating.pipStatus$,
           initialData: PiPStatus.disabled,
           builder: (context, snapshot) => snapshot.data == PiPStatus.enabled
               ? widget.childWhenEnabled
               : widget.childWhenDisabled,
-        )
-      : widget.childWhenDisabled;
+        );
 }
